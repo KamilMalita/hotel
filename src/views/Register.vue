@@ -61,10 +61,14 @@
               </v-card-actions>
             </v-card>
           </v-col>
+<!--          <button @click="signInWithGoogle">Sign in with Google</button>-->
+<!--          <p>hahaha</p>-->
+<!--          <button @click="checkLogin">Sign in with Google</button>-->
         </v-row>
       </v-container>
     </v-content>
   </v-app>
+<!--<a></a>-->
 </template>
 
 <script>
@@ -78,11 +82,11 @@ export default {
         email: '',
         password: '',
         password2: '',
-      visi: 'false',
+      visi: false,
       drawer: null,
+      aut: firebase.auth.EmailAuthProvider.PROVIDER_ID
     }),
   mounted(){
-      this.visi=false;
   },
     methods: {
         registration: function () {
@@ -98,8 +102,22 @@ export default {
             );
           }
           else {this.visi=true;}
+        },
+        signInWithGoogle: function() {
+        const provider = new firebase.auth.GoogleAuthProvider()
+        firebase.auth().signInWithRedirect(provider).then((result) => {
+          this.user = result.user;
+          console.log((result.arg));
+        }).catch(err => console.log(err.message))
+      }
+    },
+        checkLogin: function(){
+      if(firebase.auth().currentUser.isAnonymous){
+        firebase.auth().signOut();
+        console.log('Good');
+      }
+      else console.log('Bad')
         }
-    }
   }
 </script>
 
